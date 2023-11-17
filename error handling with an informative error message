@@ -1,0 +1,25 @@
+from bs4 import BeautifulSoup
+import requests
+
+def find_job_postings(url):
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'lxml')
+            job_postings = soup.find_all('li', class_='job-posting')
+            return job_postings
+        else:
+            raise ValueError(f'Error fetching job postings: {response.status_code}')
+    except Exception as e:
+        print(f'Error occurred during web scraping: {e}')
+        return []
+
+url = 'https://www.example.com/jobs'
+job_postings = find_job_postings(url)
+
+if job_postings:
+    for job_posting in job_postings:
+        # Process job posting data
+        print(job_posting)
+else:
+    print('No job postings found.')
